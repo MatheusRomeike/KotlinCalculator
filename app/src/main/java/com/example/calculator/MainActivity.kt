@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
                 workingsTV.append(view.text)
             canAddOperation = true
         }
-
         equalsAction(view)
     }
 
@@ -44,7 +43,6 @@ class MainActivity : ComponentActivity() {
             canAddOperation = false
             canAddDecimal = true
         }
-
         equalsAction(view)
     }
 
@@ -56,11 +54,21 @@ class MainActivity : ComponentActivity() {
     fun backSpaceAction(view: View) {
         val length = workingsTV.text.length
         if (length > 0) {
+            val lastChar = workingsTV.text.last()
             workingsTV.text = workingsTV.text.subSequence(0, length - 1)
+            if (lastChar == '.')
+                canAddDecimal = true
+            else if (lastChar.isLetter())
+                canAddOperation = false
+            else
+                canAddOperation = true
         }
+        equalsAction(view)
     }
 
     fun equalsAction(view: View) {
+        val lastDigit = workingsTV.text.last()
+        if (arrayOf('/', 'x', '-', '+', '.').contains(lastDigit)) return
         resultsTV.text = "= " + calculateResults()
     }
 
